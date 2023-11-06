@@ -8,6 +8,8 @@
 
 import SwiftUI
 
+#warning("need to reimplement needsToScrollToBottom for both views")
+
 public struct FullSpeedVStackCollectionView<Section: Hashable, CellItem: Hashable, CellView: View, SupplementaryView: View>: UIViewRepresentable {
 
     private class HostCell: UICollectionViewCell {
@@ -114,7 +116,7 @@ public struct FullSpeedVStackCollectionView<Section: Hashable, CellItem: Hashabl
     public init(rows: [FullSpeedVStackSectionWithCells<Section, CellItem>],
                 backgroundColor: UIColor,
                 invertView: Bool = false,
-                needsToScrollToBottom: Binding<Bool>,
+                needsToScrollToBottom: Binding<Bool>?,
                 sectionLayoutProvider: @escaping (Int, NSCollectionLayoutEnvironment) -> NSCollectionLayoutSection,
                 @ViewBuilder cell: @escaping (IndexPath, CellItem) -> CellView,
                 @ViewBuilder supplementaryView: @escaping (String, IndexPath) -> SupplementaryView,

@@ -87,7 +87,7 @@ public struct FullSpeedVStackTableView<Section: Hashable, CellItem: Hashable, Ce
     public init(rows: [FullSpeedVStackSectionWithCells<Section, CellItem>],
          backgroundColor: UIColor,
          invertView: Bool = false,
-         needsToScrollToBottom: Binding<Bool>,
+         needsToScrollToBottom: Binding<Bool>?,
 //         sectionLayoutProvider: @escaping (Int, NSCollectionLayoutEnvironment) -> NSCollectionLayoutSection,
          @ViewBuilder cell: @escaping (IndexPath, CellItem) -> CellView,
          @ViewBuilder supplementaryView: @escaping (String, IndexPath) -> SupplementaryView,
