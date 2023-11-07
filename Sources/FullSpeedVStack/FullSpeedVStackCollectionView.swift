@@ -296,7 +296,7 @@ final fileprivate class CustomUICollectionView: UICollectionView {
     //        self.scrollToItem(at: theIndexPath, at: .bottom, animated: false)
     //    }
     
-    #warning("add to both collection and table view")
+    #warning("add keyboard to both collection and table view")
 //    @objc private func adjustForKeyboard(notification: Notification) {
       
     @objc private func keyboardWillChangeFrame(_ notification: Notification) {
@@ -306,10 +306,12 @@ final fileprivate class CustomUICollectionView: UICollectionView {
         else { return }
         
         let keyboardHeightDynamic = endPos.height
-        
+
+#warning("fix this")
+        /*
         self.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: keyboardHeightDynamic, right: 0)
         self.scrollIndicatorInsets = self.contentInset
-
+*/
         //        print("keyboardHeight", keyboardHeight)
     }
     
