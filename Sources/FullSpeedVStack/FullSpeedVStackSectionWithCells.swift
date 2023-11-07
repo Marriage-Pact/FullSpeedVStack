@@ -12,7 +12,6 @@ import Foundation
 
 public protocol SectionItemProtocol: Hashable, Comparable, CaseIterable {
     var headerString: String { get set }
-    init(section: Self, content: any CellItemProtocol)
 }
 
 public protocol CellItemProtocol: Identifiable, Hashable, CustomStringConvertible {
