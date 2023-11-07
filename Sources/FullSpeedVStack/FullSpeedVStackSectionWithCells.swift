@@ -38,7 +38,7 @@ public struct FullSpeedVStackSectionWithCells<Section: SectionItemProtocol, Cell
         self.displaySectionsWhenEmpty = displaySectionsWhenEmpty
     }
     
-    var shouldBeDisplayed: Bool {
+    public var shouldBeDisplayed: Bool {
         switch displaySectionsWhenEmpty {
         case true:
             return true
@@ -47,7 +47,7 @@ public struct FullSpeedVStackSectionWithCells<Section: SectionItemProtocol, Cell
         }
     }
     
-    func searchItemsCopy(searchText: String) -> FullSpeedVStackSectionWithCells {
+    public func searchItemsCopy(searchText: String) -> FullSpeedVStackSectionWithCells {
         
         let itemsContainingSearch: [CellItem] = self.items.compactMap { cellModel in
             if cellModel.contentToSearchWhenSearching.containsIgnoringCase(find: searchText) {
