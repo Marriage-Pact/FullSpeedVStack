@@ -60,20 +60,5 @@ public struct FullSpeedVStackSectionWithCells<Section: SectionItemProtocol, Cell
         return FullSpeedVStackSectionWithCells(section: self.section,
                                                items: itemsContainingSearch,
                                                displaySectionsWhenEmpty: self.displaySectionsWhenEmpty)
-        
-//        Section(section: self.section,
-//                       content: itemsContainingSearch,
-//                       displaySectionsWhenEmpty: self.displaySectionsWhenEmpty)
     }
-    
-//    private func searchItems(searchText: String) -> [CellItem] {
-//        return []
-//        return self.content.compactMap { matchModel in
-//            if matchModel.displayName.containsIgnoringCase(find: searchText) {
-//                return matchModel
-//            } else {
-//                return nil
-//            }
-//        }
-//    }
 }

@@ -268,6 +268,8 @@ final fileprivate class CustomUICollectionView: UICollectionView {
         
         super.init(frame: frame, collectionViewLayout: collectionViewLayout)
         
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillChangeFrame), name: UIResponder.keyboardWillChangeFrameNotification, object: nil)
+        
         if invertView {
             self.transform = CGAffineTransform(scaleX: 1, y: -1)
         }
@@ -294,24 +296,32 @@ final fileprivate class CustomUICollectionView: UICollectionView {
     //        self.scrollToItem(at: theIndexPath, at: .bottom, animated: false)
     //    }
     
-    //    @objc private func adjustForKeyboard(notification: Notification) {
-    //        //        guard let keyboardValue = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue else { return }
-    //
-    //        //        let keyboardScreenEndFrame = keyboardValue.cgRectValue
-    //        //        let keyboardViewEndFrame = view.convert(keyboardScreenEndFrame, from: view.window)
-    //
-    //        if notification.name == UIResponder.keyboardWillHideNotification {
-    //            self.contentInset = .zero
-    //        } else {
-    //            let height = OnboardingConstants.KeyboardSizeOnly(includesSuggestionBar: false)
-    //            self.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: height, right: 0)
-    //        }
-    //
-    //        self.scrollIndicatorInsets = self.contentInset
-    //
-    //        //        let selectedRange = self.selectedRange
-    //        //        self.scrollRangeToVisible(selectedRange)
-    //    }
+    #warning("add to both collection and table view")
+//    @objc private func adjustForKeyboard(notification: Notification) {
+      
+    @objc private func keyboardWillChangeFrame(_ notification: Notification) {
+        guard
+            let userInfo = notification.userInfo,
+            let endPos = userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect
+        else { return }
+        
+        let keyboardHeightDynamic = endPos.height
+        
+        self.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: keyboardHeightDynamic, right: 0)
+        self.scrollIndicatorInsets = self.contentInset
+
+        //        print("keyboardHeight", keyboardHeight)
+    }
+    
+//    
+//    if notification.name == UIResponder.keyboardWillHideNotification {
+//        self.contentInset = .zero
+//    } else {
+//        let height = OnboardingConstants.KeyboardSizeOnly(includesSuggestionBar: false)
+//        self.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: height, right: 0)
+//    }
+//    
+//}
     //
     //    private var hasAwoken = false
     
