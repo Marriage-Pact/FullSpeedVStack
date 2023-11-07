@@ -11,7 +11,7 @@ import Foundation
 // https://github.com/defagos/SwiftUICollection
 
 public protocol SectionItemProtocol: Hashable, Comparable, CaseIterable {
-    var headerString: String { get set }
+    var headerString: String { get }
 }
 
 public protocol CellItemProtocol: Identifiable, Hashable, CustomStringConvertible {
