@@ -10,7 +10,7 @@ import SwiftUI
 
 #warning("need to reimplement needsToScrollToBottom for both views")
 
-public struct FullSpeedVStackCollectionView<Section: Hashable, CellItem: Hashable, CellView: View, SupplementaryView: View>: UIViewRepresentable {
+public struct FullSpeedVStackCollectionView<Section: SectionItemProtocol, CellItem: CellItemProtocol, CellView: View, SupplementaryView: View>: UIViewRepresentable {
 
     private class HostCell: UICollectionViewCell {
         

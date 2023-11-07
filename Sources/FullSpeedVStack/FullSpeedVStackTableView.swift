@@ -10,7 +10,7 @@ import SwiftUI
 
 #warning("need to build in support for table view headers")
 
-public struct FullSpeedVStackTableView<Section: Hashable, CellItem: Hashable, CellView: View, SupplementaryView: View>: UIViewRepresentable {
+public struct FullSpeedVStackTableView<Section: SectionItemProtocol, CellItem: CellItemProtocol, CellView: View, SupplementaryView: View>: UIViewRepresentable {
 
     private class HostCell: UITableViewCell {
         

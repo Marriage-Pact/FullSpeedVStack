@@ -10,17 +10,71 @@ import Foundation
 // https://defagos.github.io/swiftui_collection_part3/
 // https://github.com/defagos/SwiftUICollection
 
-public struct FullSpeedVStackSectionWithCells<Section: Hashable, CellItem: Hashable>: Hashable {
+public protocol SectionItemProtocol: Hashable, Comparable, CaseIterable {
+    var headerString: String { get set }
+    init(section: Self, content: any CellItemProtocol)
+}
+
+public protocol CellItemProtocol: Identifiable, Hashable, CustomStringConvertible {
+    
+    var contentToSearchWhenSearching: String { get }
+}
+
+extension String {
+    fileprivate func containsIgnoringCase(find: String) -> Bool {
+        return self.range(of: find, options: .caseInsensitive) != nil
+    }
+}
+
+public struct FullSpeedVStackSectionWithCells<Section: SectionItemProtocol, CellItem: CellItemProtocol>: Hashable {
+    
     let section: Section
     let items: [CellItem]
     
-    public init(section: Section, items: [CellItem]) {
+    let displaySectionsWhenEmpty: Bool
+    
+    public init(section: Section, items: [CellItem], displaySectionsWhenEmpty: Bool) {
         self.section = section
         self.items = items
+        self.displaySectionsWhenEmpty = displaySectionsWhenEmpty
     }
     
     var shouldBeDisplayed: Bool {
-        //self.content.isEmpty == false
-        return true
+        switch displaySectionsWhenEmpty {
+        case true:
+            return true
+        case false:
+            return self.items.isEmpty == false
+        }
     }
+    
+    func searchItemsCopy(searchText: String) -> FullSpeedVStackSectionWithCells {
+        
+        let itemsContainingSearch: [CellItem] = self.items.compactMap { cellModel in
+            if cellModel.contentToSearchWhenSearching.containsIgnoringCase(find: searchText) {
+                return cellModel
+            } else {
+                return nil
+            }
+        }
+        
+        return FullSpeedVStackSectionWithCells(section: self.section,
+                                               items: itemsContainingSearch,
+                                               displaySectionsWhenEmpty: self.displaySectionsWhenEmpty)
+        
+//        Section(section: self.section,
+//                       content: itemsContainingSearch,
+//                       displaySectionsWhenEmpty: self.displaySectionsWhenEmpty)
+    }
+    
+//    private func searchItems(searchText: String) -> [CellItem] {
+//        return []
+//        return self.content.compactMap { matchModel in
+//            if matchModel.displayName.containsIgnoringCase(find: searchText) {
+//                return matchModel
+//            } else {
+//                return nil
+//            }
+//        }
+//    }
 }
