@@ -27,10 +27,10 @@ extension String {
 
 public struct FullSpeedVStackSectionWithCells<Section: SectionItemProtocol, CellItem: CellItemProtocol>: Hashable {
     
-    let section: Section
-    let items: [CellItem]
+    public let section: Section
+    public let items: [CellItem]
     
-    let displaySectionsWhenEmpty: Bool
+    public let displaySectionsWhenEmpty: Bool
     
     public init(section: Section, items: [CellItem], displaySectionsWhenEmpty: Bool) {
         self.section = section
