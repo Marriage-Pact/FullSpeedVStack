@@ -113,7 +113,7 @@ public struct FullSpeedVStackCollectionView<Section: SectionItemProtocol, CellIt
     let collectionViewId: String
 
     var needsToScrollToBottom: Binding<Bool>? = nil
-    var needsToScrollToItem: Binding<IndexPath?>? = nil
+    var needsToScrollToItem: Binding<ScrollToItemAnimated?>? = nil
 
     var willDisplayCell: ((_ collectionView: UICollectionView, _ cell: UICollectionViewCell, _ indexPath: IndexPath) -> Void)
     
@@ -122,7 +122,7 @@ public struct FullSpeedVStackCollectionView<Section: SectionItemProtocol, CellIt
                 backgroundColor: UIColor,
                 invertView: Bool = false,
                 needsToScrollToBottom: Binding<Bool>?,
-                needsToScrollToItem: Binding<IndexPath?>, /// This binding needs to be a concrete type for it to work
+                needsToScrollToItem: Binding<ScrollToItemAnimated?>, /// This binding needs to be a concrete type for it to work
                 sectionLayoutProvider: @escaping (Int, NSCollectionLayoutEnvironment) -> NSCollectionLayoutSection,
                 @ViewBuilder cell: @escaping (IndexPath, CellItem) -> CellView,
                 @ViewBuilder supplementaryView: @escaping (String, IndexPath) -> SupplementaryView,
@@ -191,25 +191,25 @@ public struct FullSpeedVStackCollectionView<Section: SectionItemProtocol, CellIt
 //              wrappedValue else { return }
         
 //        print("handleIfNeedToScrollToItem")
-        guard let indexPath = self.needsToScrollToItem?.wrappedValue else { return }
+        guard let scrollItem = self.needsToScrollToItem?.wrappedValue else { return }
         
-        guard collectionView.isValid(indexPath: indexPath) else {
-            print("Error: indexPath \(indexPath) not valid")
+        guard collectionView.isValid(indexPath: scrollItem.indexPath) else {
+            print("Error: indexPath \(scrollItem.indexPath) not valid")
             return
         }
-        collectionViewScrollToIndexPath(collectionView: collectionView, indexPath: indexPath)
+        collectionViewScrollToIndexPath(collectionView: collectionView, scrollItem: scrollItem)
         
 //        NotificationCenter.default.post(name: .scrollToBottomOfChatRoomSetFalse, object: nil)
     }
 //    
-    private func collectionViewScrollToIndexPath(collectionView: UICollectionView, indexPath: IndexPath) {
+    private func collectionViewScrollToIndexPath(collectionView: UICollectionView, scrollItem: ScrollToItemAnimated) {
         
         DispatchQueue.main.async {
-            print("executing scroll to: \(indexPath)")
-            collectionView.scrollToItem(at: indexPath, at: .centeredVertically, animated: true)
+            print("executing scroll to: \(scrollItem.indexPath)")
+            collectionView.scrollToItem(at: scrollItem.indexPath, at: .centeredVertically, animated: scrollItem.animated)
 //            let rect = CGRect(x: 0, y: 0, width: 1, height: 1)
 //            collectionView.scrollRectToVisible(rect, animated: false)
-            NotificationCenter.default.post(name: .FullSpeedVStackSetScrollToIndexPathNil, object: nil)
+            NotificationCenter.default.post(name: .FullSpeedVStackSetScrollToIndexPathNil, object: FullSpeedVStackSetScrollToIndexPathNilNotification(collectionViewIdentifier: self.collectionViewId))
         }
     }
     

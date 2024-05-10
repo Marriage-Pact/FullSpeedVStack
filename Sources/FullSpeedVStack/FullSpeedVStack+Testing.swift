@@ -7,7 +7,7 @@ fileprivate class TestViewModel: ObservableObject {
     
     @Published public private(set) var sectionsDisplayed: [SectionWithCellsItem] = []
     
-    @Published var scrollToItemAnimated: IndexPath? = nil
+    @Published var scrollToItem: ScrollToItemAnimated? = nil
     
     init() {
         let cells: [CellViewModel] = [
@@ -51,8 +51,8 @@ fileprivate class TestViewModel: ObservableObject {
 //            return
 //        }
         DispatchQueue.main.async { [weak self] in
-            print("scrollToItemAnimated = nil")
-            self?.scrollToItemAnimated = nil
+            print("scrollToItem = nil")
+            self?.scrollToItem = nil
         }
     }
 
@@ -64,18 +64,17 @@ struct TestCollectionView: View {
     
     var body: some View {
         VStack {
-            Button {
-                if let lastItem = viewModel.sectionsDisplayed.last?.items.last {
-                    
+            HStack {
+                Button {
+                    viewModel.scrollToItem = ScrollToItemAnimated(indexPath: IndexPath(item: 20, section: 0), animated: true)
+                } label: {
+                    Text("scroll animated")
                 }
-            
-                viewModel.scrollToItemAnimated = IndexPath(item: 20, section: 0)
-                
-                //viewModel.$sectionsDisplayed.first.items.first
-                
-//                }
-            } label: {
-                Text("scroll to item")
+                Button {
+                    viewModel.scrollToItem = ScrollToItemAnimated(indexPath: IndexPath(item: 20, section: 0), animated: false)
+                } label: {
+                    Text("scroll NOTAnimated")
+                }
             }
 
             collectionView
@@ -89,7 +88,7 @@ struct TestCollectionView: View {
                                       collectionViewId: "testIdForOnlyThisTab",
                                       backgroundColor: UIColor.red,
                                       needsToScrollToBottom: nil,
-                                      needsToScrollToItem: $viewModel.scrollToItemAnimated,
+                                      needsToScrollToItem: $viewModel.scrollToItem,
                                       sectionLayoutProvider: { sectionIndex, layoutEnvironment in
             
             let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
