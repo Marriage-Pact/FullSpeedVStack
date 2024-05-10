@@ -192,6 +192,10 @@ public struct FullSpeedVStackCollectionView<Section: SectionItemProtocol, CellIt
         
         guard let indexPath = self.needsToScrollToItem?.wrappedValue else { return }
         
+        guard collectionView.isValid(indexPath: indexPath) else {
+            print("Error: indexPath \(indexPath) not valid")
+            return
+        }
         collectionViewScrollToIndexPath(collectionView: collectionView, indexPath: indexPath)
         
 //        NotificationCenter.default.post(name: .scrollToBottomOfChatRoomSetFalse, object: nil)
@@ -200,11 +204,9 @@ public struct FullSpeedVStackCollectionView<Section: SectionItemProtocol, CellIt
     private func collectionViewScrollToIndexPath(collectionView: UICollectionView, indexPath: IndexPath) {
         
         DispatchQueue.main.async {
-//            let rect = CGRect(x: 0, y: 0, width: 1, height: 1)
-            #warning("add index path protection")
             collectionView.scrollToItem(at: indexPath, at: .centeredVertically, animated: true)
+//            let rect = CGRect(x: 0, y: 0, width: 1, height: 1)
 //            collectionView.scrollRectToVisible(rect, animated: false)
-            
             NotificationCenter.default.post(name: .FullSpeedVStackSetScrollToIndexPathNil, object: nil)
         }
     }
@@ -319,7 +321,6 @@ final fileprivate class CustomUICollectionView: UICollectionView {
 //        guard scrollObject.collectionViewId == self.collectionViewId else { return }
         
 //        guard let theIndexPath.collectionViewIdentifier == self.collectionViewId else { return }
-        #warning("add safe, within collection view array index protection.")
         
 //        self.scrollToItem(at: scrollObject.indexPath, at: .bottom, animated: false)
 //    }
