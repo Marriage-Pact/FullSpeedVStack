@@ -9,7 +9,7 @@ fileprivate class TestViewModel: ObservableObject {
     
     @Published public private(set) var sectionsDisplayed: [SectionWithCellsItem] = []
     
-    @Published var scrollToItem: CellViewModel? = nil
+    @Published var scrollToItem: IndexPath? = nil
     
     init() {
         let cells: [CellViewModel] = [
@@ -48,15 +48,16 @@ fileprivate class TestViewModel: ObservableObject {
 
 struct TestCollectionView: View {
 
-    fileprivate var viewModel = TestViewModel()
+    @ObservedObject fileprivate var viewModel = TestViewModel()
     
     var body: some View {
         VStack {
             Button {
-                /*if let lastItem =*/ 
-                //viewModel.sectionsDisplayed.first?.items.last
+                if let lastItem = viewModel.sectionsDisplayed.last?.items.last {
+                    
+                }
             
-                viewModel.scrollToItem = CellViewModel()
+                viewModel.scrollToItem = IndexPath(item: 20, section: 0)
                 
                 //viewModel.$sectionsDisplayed.first.items.first
                 
@@ -76,7 +77,7 @@ struct TestCollectionView: View {
                                       collectionViewId: "testIdForOnlyThisTab",
                                       backgroundColor: UIColor.red,
                                       needsToScrollToBottom: nil,
-                                      needsToScrollToItem: viewModel.scrollToItem,
+                                      needsToScrollToItem: $viewModel.scrollToItem,
                                       sectionLayoutProvider: { sectionIndex, layoutEnvironment in
             
             let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),

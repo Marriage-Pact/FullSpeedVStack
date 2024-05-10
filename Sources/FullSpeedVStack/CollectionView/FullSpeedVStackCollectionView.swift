@@ -113,6 +113,8 @@ public struct FullSpeedVStackCollectionView<Section: SectionItemProtocol, CellIt
     let collectionViewId: String
 
     var needsToScrollToBottom: Binding<Bool>? = nil
+    var needsToScrollToItem: Binding<IndexPath?>? = nil
+
     var willDisplayCell: ((_ collectionView: UICollectionView, _ cell: UICollectionViewCell, _ indexPath: IndexPath) -> Void)
     
     public init(rows: [FullSpeedVStackSectionWithCells<Section, CellItem>],
@@ -120,7 +122,7 @@ public struct FullSpeedVStackCollectionView<Section: SectionItemProtocol, CellIt
                 backgroundColor: UIColor,
                 invertView: Bool = false,
                 needsToScrollToBottom: Binding<Bool>?,
-                needsToScrollToItem: Binding<any CellItemProtocol>?,
+                needsToScrollToItem: Binding<IndexPath?>, /// This binding needs to be a concrete type for it to work
                 sectionLayoutProvider: @escaping (Int, NSCollectionLayoutEnvironment) -> NSCollectionLayoutSection,
                 @ViewBuilder cell: @escaping (IndexPath, CellItem) -> CellView,
                 @ViewBuilder supplementaryView: @escaping (String, IndexPath) -> SupplementaryView,
@@ -141,6 +143,7 @@ public struct FullSpeedVStackCollectionView<Section: SectionItemProtocol, CellIt
         self.backgroundColor = backgroundColor
         self.scrollViewEndDragging = scrollViewEndDragging
         self.needsToScrollToBottom = needsToScrollToBottom
+        self.needsToScrollToItem = needsToScrollToItem
         self.scrollViewBeginDragging = scrollViewBeginDragging
         self.invertView = invertView
         self.willDisplayCell = willDisplayCell
@@ -179,26 +182,32 @@ public struct FullSpeedVStackCollectionView<Section: SectionItemProtocol, CellIt
             coordinator.rowsHash = rowsHash
         }
         
-//        handleIfNeedToScrollToLatestMessage(collectionView: collectionView)
+        handleIfNeedToScrollToItem(collectionView: collectionView)
     }
     
-//    private func handleIfNeedToScrollToLatestMessage(collectionView: UICollectionView) {
-//        
+    private func handleIfNeedToScrollToItem(collectionView: UICollectionView) {
+        
 //        guard let wrappedValue = needsToScrollToBottom?.wrappedValue,
 //              wrappedValue else { return }
-//        
-//        collectionViewScrollToLatestMessage(collectionView: collectionView)
-//        
+        
+        guard let indexPath = self.needsToScrollToItem?.wrappedValue else { return }
+        
+        collectionViewScrollToIndexPath(collectionView: collectionView, indexPath: indexPath)
+        
 //        NotificationCenter.default.post(name: .scrollToBottomOfChatRoomSetFalse, object: nil)
-//    }
+    }
 //    
-//    private func collectionViewScrollToLatestMessage(collectionView: UICollectionView) {
-//        
-//        DispatchQueue.main.async {
+    private func collectionViewScrollToIndexPath(collectionView: UICollectionView, indexPath: IndexPath) {
+        
+        DispatchQueue.main.async {
 //            let rect = CGRect(x: 0, y: 0, width: 1, height: 1)
+            #warning("add index path protection")
+            collectionView.scrollToItem(at: indexPath, at: .centeredVertically, animated: true)
 //            collectionView.scrollRectToVisible(rect, animated: false)
-//        }
-//    }
+            
+            NotificationCenter.default.post(name: .FullSpeedVStackSetScrollToIndexPathNil, object: nil)
+        }
+    }
     
     public func makeCoordinator() -> Coordinator {
         return Coordinator(backgroundColor: self.backgroundColor,
@@ -286,7 +295,7 @@ final fileprivate class CustomUICollectionView: UICollectionView {
             self.transform = CGAffineTransform(scaleX: 1, y: -1)
         }
         
-        NotificationCenter.default.addObserver(self, selector: #selector(scrollToIndexPath), name: .FullSpeedVStackScrollToIndexPath, object: nil)
+//        NotificationCenter.default.addObserver(self, selector: #selector(scrollToIndexPath), name: .FullSpeedVStackScrollToIndexPath, object: nil)
         
         //        NotificationCenter.default.addObserver(self, selector: #selector(awakeScroll), name: .awakeScroll, object: nil)
         // TODONOW: add chat list scroll to top
@@ -302,19 +311,18 @@ final fileprivate class CustomUICollectionView: UICollectionView {
     //        scrollRectToVisible(rect, animated: true)
     //    }
     //
-    @objc private func scrollToIndexPath(_ notification: Notification) {
-        
-        guard let scrollObject = notification.object as? FullSpeedVStackScrollToIndexPathNotification else { return }
+//    @objc private func scrollToIndexPath(_ notification: Notification) {
+//        
+//        guard let scrollObject = notification.object as? FullSpeedVStackScrollToIndexPathNotification else { return }
         // TODO: Handle is empty chat list
-        #warning("init with Identifier")
 //        scrollObject.indexPath
-        guard scrollObject.collectionViewId == self.collectionViewId else { return }
+//        guard scrollObject.collectionViewId == self.collectionViewId else { return }
         
 //        guard let theIndexPath.collectionViewIdentifier == self.collectionViewId else { return }
         #warning("add safe, within collection view array index protection.")
         
-        self.scrollToItem(at: scrollObject.indexPath, at: .bottom, animated: false)
-    }
+//        self.scrollToItem(at: scrollObject.indexPath, at: .bottom, animated: false)
+//    }
     
     #warning("add keyboard to both collection and table view")
 //    @objc private func adjustForKeyboard(notification: Notification) {
