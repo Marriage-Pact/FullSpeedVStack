@@ -335,7 +335,7 @@ final fileprivate class CustomUICollectionView: UICollectionView {
         
         let keyboardHeightDynamic = endPos.height
 
-#warning("fix this")
+#warning("fix this, the height / inset is not correct")
         /*
         self.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: keyboardHeightDynamic, right: 0)
         self.scrollIndicatorInsets = self.contentInset
