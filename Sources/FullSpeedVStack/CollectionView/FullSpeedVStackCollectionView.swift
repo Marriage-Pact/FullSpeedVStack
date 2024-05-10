@@ -190,6 +190,7 @@ public struct FullSpeedVStackCollectionView<Section: SectionItemProtocol, CellIt
 //        guard let wrappedValue = needsToScrollToBottom?.wrappedValue,
 //              wrappedValue else { return }
         
+//        print("handleIfNeedToScrollToItem")
         guard let indexPath = self.needsToScrollToItem?.wrappedValue else { return }
         
         guard collectionView.isValid(indexPath: indexPath) else {
@@ -204,6 +205,7 @@ public struct FullSpeedVStackCollectionView<Section: SectionItemProtocol, CellIt
     private func collectionViewScrollToIndexPath(collectionView: UICollectionView, indexPath: IndexPath) {
         
         DispatchQueue.main.async {
+            print("executing scroll to: \(indexPath)")
             collectionView.scrollToItem(at: indexPath, at: .centeredVertically, animated: true)
 //            let rect = CGRect(x: 0, y: 0, width: 1, height: 1)
 //            collectionView.scrollRectToVisible(rect, animated: false)

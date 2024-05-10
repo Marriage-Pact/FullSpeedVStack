@@ -7,7 +7,7 @@ fileprivate class TestViewModel: ObservableObject {
     
     @Published public private(set) var sectionsDisplayed: [SectionWithCellsItem] = []
     
-    @Published var scrollToItem: IndexPath? = nil
+    @Published var scrollToItemAnimated: IndexPath? = nil
     
     init() {
         let cells: [CellViewModel] = [
@@ -40,6 +40,20 @@ fileprivate class TestViewModel: ObservableObject {
         sectionsDisplayed = [
             SectionWithCellsItem(section: SectionType.main, items: cells, displaySectionsWhenEmpty: true)
         ]
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(setScrollToItemFalse), name: .FullSpeedVStackSetScrollToIndexPathNil, object: nil)
+    }
+    
+    @objc private func setScrollToItemFalse(_ notification: Notification) {
+        print("setScrollToItemFalse")
+//        guard let object = notification.object as? FullSpeedVStackSetScrollToIndexPathNilNotification, object.collectionViewId == self.collectionViewId else {
+//            print("wrong id")
+//            return
+//        }
+        DispatchQueue.main.async { [weak self] in
+            print("scrollToItemAnimated = nil")
+            self?.scrollToItemAnimated = nil
+        }
     }
 
 }
@@ -55,7 +69,7 @@ struct TestCollectionView: View {
                     
                 }
             
-                viewModel.scrollToItem = IndexPath(item: 20, section: 0)
+                viewModel.scrollToItemAnimated = IndexPath(item: 20, section: 0)
                 
                 //viewModel.$sectionsDisplayed.first.items.first
                 
@@ -75,7 +89,7 @@ struct TestCollectionView: View {
                                       collectionViewId: "testIdForOnlyThisTab",
                                       backgroundColor: UIColor.red,
                                       needsToScrollToBottom: nil,
-                                      needsToScrollToItem: $viewModel.scrollToItem,
+                                      needsToScrollToItem: $viewModel.scrollToItemAnimated,
                                       sectionLayoutProvider: { sectionIndex, layoutEnvironment in
             
             let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
