@@ -26,7 +26,7 @@ public struct FullSpeedVStackSetScrollToIndexPathNilNotification {
         self.collectionViewId = collectionViewIdentifier
     }
     
-    let collectionViewId: String
+    public let collectionViewId: String
 }
 
 
