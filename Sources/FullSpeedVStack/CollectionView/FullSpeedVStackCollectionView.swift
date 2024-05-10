@@ -194,7 +194,7 @@ public struct FullSpeedVStackCollectionView<Section: SectionItemProtocol, CellIt
         guard let scrollItem = self.needsToScrollToItem?.wrappedValue else { return }
         
         guard collectionView.isValid(indexPath: scrollItem.indexPath) else {
-            print("Error: indexPath \(scrollItem.indexPath) not valid")
+//            print("Error: indexPath \(scrollItem.indexPath) not valid")
             return
         }
         collectionViewScrollToIndexPath(collectionView: collectionView, scrollItem: scrollItem)
@@ -205,7 +205,7 @@ public struct FullSpeedVStackCollectionView<Section: SectionItemProtocol, CellIt
     private func collectionViewScrollToIndexPath(collectionView: UICollectionView, scrollItem: ScrollToItemAnimated) {
         
         DispatchQueue.main.async {
-            print("executing scroll to: \(scrollItem.indexPath)")
+//            print("executing scroll to: \(scrollItem.indexPath)")
             collectionView.scrollToItem(at: scrollItem.indexPath, at: .centeredVertically, animated: scrollItem.animated)
 //            let rect = CGRect(x: 0, y: 0, width: 1, height: 1)
 //            collectionView.scrollRectToVisible(rect, animated: false)

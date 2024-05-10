@@ -51,7 +51,7 @@ fileprivate class TestViewModel: ObservableObject {
 //            return
 //        }
         DispatchQueue.main.async { [weak self] in
-            print("scrollToItem = nil")
+//            print("scrollToItem = nil")
             self?.scrollToItem = nil
         }
     }
