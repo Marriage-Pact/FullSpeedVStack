@@ -105,7 +105,7 @@ struct TestCollectionView: View {
             
             let header = NSCollectionLayoutBoundarySupplementaryItem(
                 layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
-                                                   heightDimension: .absolute(0)),
+                                                   heightDimension: .absolute(1)),
                 elementKind: UICollectionView.elementKindSectionHeader,
                 alignment: .topLeading
             )
