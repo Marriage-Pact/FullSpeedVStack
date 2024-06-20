@@ -111,12 +111,14 @@ struct TestCollectionView: View {
             )
             section.boundarySupplementaryItems = [header]
             return section
-            
         },
         cell: { indexPath, cellModel in
-            Text("indexPath row: \(indexPath.row)")
-                .foregroundStyle(.black)
-            
+            ZStack {
+                Color.yellow
+                Text("indexPath row: \(indexPath.row)")
+                    .foregroundStyle(.black)
+            }
+              
         }, supplementaryView: { kind, indexPath in
             
         }, onGestureShouldBegin: { _, _ in

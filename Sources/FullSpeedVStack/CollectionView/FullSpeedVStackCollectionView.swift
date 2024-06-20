@@ -232,6 +232,8 @@ public struct FullSpeedVStackCollectionView<Section: SectionItemProtocol, CellIt
         
         //        collectionView.keyboardDismissMode = .interactive
         
+//        collectionView.showsVerticalScrollIndicator = false
+        
         collectionView.delegate = context.coordinator
         collectionView.register(HostCell.self, forCellWithReuseIdentifier: cellIdentifier)
         
@@ -242,10 +244,12 @@ public struct FullSpeedVStackCollectionView<Section: SectionItemProtocol, CellIt
         
         let dataSource = Coordinator.DataSource(collectionView: collectionView) { collectionView, indexPath, cellModel in
             let hostCell = collectionView.dequeueReusableCell(withReuseIdentifier: cellIdentifier, for: indexPath) as? HostCell
-            
+            hostCell?.insetsLayoutMarginsFromSafeArea = false
             hostCell?.contentConfiguration = UIHostingConfiguration {
                 cell(indexPath, cellModel)
-            }
+            } 
+            /// `UIHostingConfiguration` has extra layout margins that need to be removed.
+            .margins(.all, 0)
             
             //            hostCell?.si
             /// if the cells are not sizing properly, try adding sizeToFit(), but will likely need more handholding to make production ready.
