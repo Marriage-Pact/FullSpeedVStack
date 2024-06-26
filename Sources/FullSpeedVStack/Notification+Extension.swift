@@ -32,6 +32,7 @@ public struct FullSpeedVStackSetScrollToIndexPathNilNotification {
 
 extension Notification.Name {
     public static let FullSpeedVStackSetScrollToIndexPathNil = Notification.Name("FullSpeedVStackSetScrollToIndexPathNil")
+    public static let FullSpeedVStackAwakeScroll = Notification.Name("FullSpeedVStackAwakeScroll")
 
 //    public static let FullSpeedVStackScrollToIndexPath = Notification.Name("FullSpeedVStackScrollToIndexPath")
 }

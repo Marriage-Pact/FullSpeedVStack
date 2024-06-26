@@ -305,8 +305,9 @@ final fileprivate class CustomUICollectionView: UICollectionView {
         
 //        NotificationCenter.default.addObserver(self, selector: #selector(scrollToIndexPath), name: .FullSpeedVStackScrollToIndexPath, object: nil)
         
-        //        NotificationCenter.default.addObserver(self, selector: #selector(awakeScroll), name: .awakeScroll, object: nil)
-        // TODONOW: add chat list scroll to top
+        NotificationCenter.default.addObserver(self, selector: #selector(awakeScroll), name: .FullSpeedVStackAwakeScroll, object: nil)
+        
+        // TODO: add chat list scroll to top
         //        NotificationCenter.default.addObserver(self, selector: #selector(scrollToTop), name: .friendListScrollToTop, object: nil)
     }
     
@@ -360,7 +361,7 @@ final fileprivate class CustomUICollectionView: UICollectionView {
 //    
 //}
     //
-    //    private var hasAwoken = false
+    private var hasAwoken = false
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
@@ -375,18 +376,18 @@ final fileprivate class CustomUICollectionView: UICollectionView {
     /// - look at the comment with `didSelectItemAt`
     /// - adding to the SwiftUI View  `.allowsHitTesting(true)`
     
-    //    @objc func awakeScroll() {
-    //        //        print("awakeScroll")
-    //
-    //        guard hasAwoken == false else { return }
-    //        hasAwoken = true
-    //        DispatchQueue.main.async { [weak self] in
-    //            // TODONow: test on device with short lists that don't fill the screen fully.
-    //            /// This is not great.
-    //            self?.scrollRectToVisible(CGRect(origin: CGPoint(x: 0, y: 2000), size: CGSize(width: 1, height: 1)), animated: false)
-    //            self?.scrollRectToVisible(CGRect(origin: CGPoint(x: 0, y: 0), size: CGSize(width: 1, height: 1)), animated: false)
-    //        }
-    //    }
+    @objc func awakeScroll() {
+        //        print("awakeScroll")
+        
+        guard hasAwoken == false else { return }
+        hasAwoken = true
+        DispatchQueue.main.async { [weak self] in
+            // TODONow: test on device with short lists that don't fill the screen fully.
+            /// This is not great.
+            self?.scrollRectToVisible(CGRect(origin: CGPoint(x: 0, y: 2000), size: CGSize(width: 1, height: 1)), animated: false)
+            self?.scrollRectToVisible(CGRect(origin: CGPoint(x: 0, y: 0), size: CGSize(width: 1, height: 1)), animated: false)
+        }
+    }
     
     //    @objc func scrollToTop() {
     //        self.setContentOffset(CGPoint.zero, animated: true)
