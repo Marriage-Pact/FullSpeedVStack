@@ -10,6 +10,11 @@ import SwiftUI
 
 #warning("need to reimplement needsToScrollToBottom for both views")
 
+fileprivate struct Identifiers {
+    fileprivate static let SupplementaryViewIdentifierHeader = "hostSupplementaryViewHeader"
+    fileprivate static let SupplementaryViewIdentifierFooter = "hostSupplementaryViewFooter"
+}
+
 public struct FullSpeedVStackCollectionView<Section: SectionItemProtocol, CellItem: CellItemProtocol, CellView: View, SupplementaryView: View>: UIViewRepresentable {
 
     private class HostCell: UICollectionViewCell {
@@ -223,7 +228,6 @@ public struct FullSpeedVStackCollectionView<Section: SectionItemProtocol, CellIt
     
     public func makeUIView(context: Context) -> UICollectionView {
         let cellIdentifier = "hostCell"
-        let supplementaryViewIdentifier = "hostSupplementaryView"
         
         let collectionView = CustomUICollectionView(frame: .zero,
                                                     collectionViewLayout: layout(context: context), 
@@ -262,20 +266,33 @@ public struct FullSpeedVStackCollectionView<Section: SectionItemProtocol, CellIt
         context.coordinator.dataSource = dataSource
         
         /// There was a memory leak that the debugger said was linked to the supplementary view, so I moved the registration outside the following closure and it appeared to work
-        
+
         collectionView.register(HostSupplementaryView.self,
                                 forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
-                                withReuseIdentifier: supplementaryViewIdentifier)
-        
+                                withReuseIdentifier: Identifiers.SupplementaryViewIdentifierHeader)
+
         collectionView.register(HostSupplementaryView.self,
                                 forSupplementaryViewOfKind: UICollectionView.elementKindSectionFooter,
-                                withReuseIdentifier: supplementaryViewIdentifier)
+                                withReuseIdentifier: Identifiers.SupplementaryViewIdentifierFooter)
         
         dataSource.supplementaryViewProvider = { collectionView, kind, indexPath in
             
-            guard let view = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: supplementaryViewIdentifier, for: indexPath) as? HostSupplementaryView else { return nil }
-            view.hostedSupplementaryView = supplementaryView(kind, indexPath)
-            return view
+            switch kind {
+            case UICollectionView.elementKindSectionHeader:
+                guard let headerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: Identifiers.SupplementaryViewIdentifierHeader, for: indexPath) as? HostSupplementaryView else { return nil }
+                headerView.hostedSupplementaryView = supplementaryView(kind, indexPath)
+                return headerView
+            case UICollectionView.elementKindSectionFooter:
+                guard let footerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: Identifiers.SupplementaryViewIdentifierFooter, for: indexPath) as? HostSupplementaryView else { return nil }
+                footerView.hostedSupplementaryView = supplementaryView(kind, indexPath)
+                return footerView
+            default:
+                return nil
+            }
+            
+//            guard let view = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: supplementaryViewIdentifier, for: indexPath) as? HostSupplementaryView else { return nil }
+//            view.hostedSupplementaryView = supplementaryView(kind, indexPath)
+//            return view
         }
         
         reloadData(in: collectionView, context: context)
@@ -285,7 +302,6 @@ public struct FullSpeedVStackCollectionView<Section: SectionItemProtocol, CellIt
     public func updateUIView(_ uiView: UICollectionView, context: Context) {
         reloadData(in: uiView, context: context, animated: true)
     }
-    
 }
 
 /// This is so we can override `gestureRecognizerShouldBegin`
