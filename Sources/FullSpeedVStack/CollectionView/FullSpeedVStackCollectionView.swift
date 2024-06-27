@@ -261,11 +261,14 @@ public struct FullSpeedVStackCollectionView<Section: SectionItemProtocol, CellIt
         }
         context.coordinator.dataSource = dataSource
         
-        // TODO: limited only to headers sections...
         /// There was a memory leak that the debugger said was linked to the supplementary view, so I moved the registration outside the following closure and it appeared to work
-        let kind = "UICollectionElementKindSectionHeader"
+        
         collectionView.register(HostSupplementaryView.self,
-                                forSupplementaryViewOfKind: kind,
+                                forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
+                                withReuseIdentifier: supplementaryViewIdentifier)
+        
+        collectionView.register(HostSupplementaryView.self,
+                                forSupplementaryViewOfKind: UICollectionView.elementKindSectionFooter,
                                 withReuseIdentifier: supplementaryViewIdentifier)
         
         dataSource.supplementaryViewProvider = { collectionView, kind, indexPath in
