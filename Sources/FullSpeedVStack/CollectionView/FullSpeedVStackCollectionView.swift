@@ -289,10 +289,7 @@ public struct FullSpeedVStackCollectionView<Section: SectionItemProtocol, CellIt
             default:
                 return nil
             }
-            
-//            guard let view = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: supplementaryViewIdentifier, for: indexPath) as? HostSupplementaryView else { return nil }
-//            view.hostedSupplementaryView = supplementaryView(kind, indexPath)
-//            return view
+    
         }
         
         reloadData(in: collectionView, context: context)
