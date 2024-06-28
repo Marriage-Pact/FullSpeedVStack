@@ -20,6 +20,7 @@ public struct FullSpeedVStackCollectionView<Section: SectionItemProtocol, CellIt
     private class HostCell: UICollectionViewCell {
         
         override func prepareForReuse() {
+            super.prepareForReuse()
             self.contentConfiguration = nil
         }
     }
@@ -29,6 +30,7 @@ public struct FullSpeedVStackCollectionView<Section: SectionItemProtocol, CellIt
         private var hostController: UIHostingController<SupplementaryView>?
         
         override func prepareForReuse() {
+            super.prepareForReuse()
             if let hostView = hostController?.view {
                 hostView.removeFromSuperview()
             }

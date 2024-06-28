@@ -15,6 +15,7 @@ public struct FullSpeedVStackTableView<Section: SectionItemProtocol, CellItem: C
     private class HostCell: UITableViewCell {
         
         override func prepareForReuse() {
+            super.prepareForReuse()
             self.contentConfiguration = nil
         }
     }
