@@ -8,7 +8,7 @@
 
 import SwiftUI
 
-#warning("need to reimplement needsToScrollToBottom for both views")
+// #warning("need to reimplement needsToScrollToBottom for both views")
 
 fileprivate struct Identifiers {
     fileprivate static let SupplementaryViewIdentifierHeader = "hostSupplementaryViewHeader"

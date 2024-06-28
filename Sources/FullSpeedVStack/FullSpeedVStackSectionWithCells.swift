@@ -14,6 +14,20 @@ public protocol SectionItemProtocol: Hashable, Comparable, CaseIterable {
     var headerString: String { get }
 }
 
+/// When it's an enum with an associated value, make sure that value that is in `hash(into` is that associated value.
+/*
+ func hash(into hasher: inout Hasher) {
+ switch self {
+ case .topLineNumbers(let viewModel):
+ hasher.combine(viewModel)
+ */
+/// Also do a big switch statement for the `static func ==`
+/*
+ static func == (lhs: UserProfileCellViewModel, rhs: UserProfileCellViewModel) -> Bool {
+ switch (lhs, rhs) {
+ case (.topLineNumbers(let lhsViewModel), .topLineNumbers(let rhsViewModel)):
+ return lhsViewModel == rhsViewModel
+ */
 public protocol CellItemProtocol: Identifiable, Hashable, CustomStringConvertible {
     
     var contentToSearchWhenSearching: String { get }
