@@ -56,9 +56,9 @@ public struct FullSpeedVStackCollectionView<Section: SectionItemProtocol, CellIt
     public class Coordinator: NSObject, UICollectionViewDelegate, UIScrollViewDelegate, UIGestureRecognizerDelegate {
         
         init(backgroundColor: UIColor,
-             onScroll: @escaping ((UIScrollView) -> Void),
-             scrollViewEndDragging: @escaping ((UIScrollView) -> Void),
-             scrollViewBeginDragging: @escaping ((UIScrollView) -> Void),
+             onScroll: @escaping ScrollViewAndOptionalCollectionView,
+             scrollViewEndDragging: @escaping ScrollViewAndOptionalCollectionView,
+             scrollViewBeginDragging: @escaping ScrollViewAndOptionalCollectionView,
              willDisplayCell: @escaping ((_ collectionView: UICollectionView, _ cell: UICollectionViewCell, _ indexPath: IndexPath) -> Void)
         ) {
             self.onScroll = onScroll
@@ -69,9 +69,11 @@ public struct FullSpeedVStackCollectionView<Section: SectionItemProtocol, CellIt
             super.init()
         }
         
-        fileprivate var onScroll: ((UIScrollView) -> Void)
-        fileprivate var scrollViewEndDragging: ((UIScrollView) -> Void)
-        fileprivate var scrollViewBeginDragging: ((UIScrollView) -> Void)
+        weak var collectionViewReference: UICollectionView?
+
+        fileprivate var onScroll: ScrollViewAndOptionalCollectionView
+        fileprivate var scrollViewEndDragging: ScrollViewAndOptionalCollectionView
+        fileprivate var scrollViewBeginDragging: ScrollViewAndOptionalCollectionView
         fileprivate var willDisplayCell: ((_ collectionView: UICollectionView, _ cell: UICollectionViewCell, _ indexPath: IndexPath) -> Void)
         
         fileprivate typealias DataSource = UICollectionViewDiffableDataSource<Section, CellItem>
@@ -83,15 +85,15 @@ public struct FullSpeedVStackCollectionView<Section: SectionItemProtocol, CellIt
         fileprivate let backgroundColor: UIColor
         
         public func scrollViewDidScroll(_ scrollView: UIScrollView) {
-            onScroll(scrollView)
+            onScroll(scrollView, self.collectionViewReference)
         }
         
         public func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
-            self.scrollViewEndDragging(scrollView)
+            self.scrollViewEndDragging(scrollView, self.collectionViewReference)
         }
         
         public func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
-            self.scrollViewBeginDragging(scrollView)
+            self.scrollViewBeginDragging(scrollView, self.collectionViewReference)
         }
         
         public func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
@@ -110,10 +112,12 @@ public struct FullSpeedVStackCollectionView<Section: SectionItemProtocol, CellIt
     let supplementaryView: (String, IndexPath) -> SupplementaryView
     //    let supplementaryViewFull: SupplementaryViewProvider
     
+    public typealias ScrollViewAndOptionalCollectionView = ((UIScrollView, UICollectionView?) -> Void)
+    
     var onGestureShouldBegin: ((_ gestureRecognizer: UIPanGestureRecognizer, _ scrollView: UIScrollView) -> Bool)?
-    var onScroll: ((UIScrollView) -> Void)
-    var scrollViewEndDragging: ((UIScrollView) -> Void)
-    var scrollViewBeginDragging: ((UIScrollView) -> Void)
+    var onScroll: ScrollViewAndOptionalCollectionView
+    var scrollViewEndDragging: ScrollViewAndOptionalCollectionView
+    var scrollViewBeginDragging: ScrollViewAndOptionalCollectionView
     
     let backgroundColor: UIColor
     let invertView: Bool
@@ -134,9 +138,9 @@ public struct FullSpeedVStackCollectionView<Section: SectionItemProtocol, CellIt
                 @ViewBuilder cell: @escaping (IndexPath, CellItem) -> CellView,
                 @ViewBuilder supplementaryView: @escaping (String, IndexPath) -> SupplementaryView,
                 onGestureShouldBegin: @escaping (_ gestureRecognizer: UIPanGestureRecognizer, _ scrollView: UIScrollView) -> Bool,
-                onScroll: @escaping ((UIScrollView) -> Void),
-                scrollViewEndDragging: @escaping ((UIScrollView) -> Void),
-                scrollViewBeginDragging: @escaping ((UIScrollView) -> Void),
+                onScroll: @escaping ScrollViewAndOptionalCollectionView,
+                scrollViewEndDragging: @escaping ScrollViewAndOptionalCollectionView,
+                scrollViewBeginDragging: @escaping ScrollViewAndOptionalCollectionView,
                 willDisplayCell: @escaping ((_ collectionView: UICollectionView, _ cell: UICollectionViewCell, _ indexPath: IndexPath) -> Void)
     ) {
         
@@ -235,6 +239,8 @@ public struct FullSpeedVStackCollectionView<Section: SectionItemProtocol, CellIt
                                                     collectionViewLayout: layout(context: context), 
                                                     invertView: self.invertView,
                                                     collectionViewId: self.collectionViewId)
+        
+        context.coordinator.collectionViewReference = collectionView
         
         //        collectionView.keyboardDismissMode = .interactive
         

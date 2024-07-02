@@ -124,9 +124,9 @@ struct TestCollectionView: View {
         }, onGestureShouldBegin: { _, _ in
             return true
         }, onScroll: {
-            scrollView in
-        }, scrollViewEndDragging: { _ in },
-        scrollViewBeginDragging: { _ in },
+            scrollView, optionalCollectionView in
+        }, scrollViewEndDragging: { _, _ in },
+        scrollViewBeginDragging: { _, _ in },
         willDisplayCell: { _, _, _ in })
     }
 }
