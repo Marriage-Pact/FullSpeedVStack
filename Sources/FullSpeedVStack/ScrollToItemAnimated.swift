@@ -14,6 +14,6 @@ public struct ScrollToItemAnimated {
         self.animated = animated
     }
     
-    let indexPath: IndexPath
-    let animated: Bool
+    public let indexPath: IndexPath
+    public let animated: Bool
 }
