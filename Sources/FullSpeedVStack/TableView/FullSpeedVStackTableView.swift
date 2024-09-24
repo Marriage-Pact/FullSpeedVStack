@@ -134,7 +134,7 @@ public struct FullSpeedVStackTableView<Section: SectionItemProtocol, CellItem: C
         return snapshot
     }
     
-    private func reloadData(in collectionView: UITableView, context: Context, animated: Bool = false) {
+    private func reloadData(in tableView: UITableView, context: Context, animated: Bool = false) {
         let coordinator = context.coordinator
 //        coordinator.sectionLayoutProvider = self.sectionLayoutProvider
         
