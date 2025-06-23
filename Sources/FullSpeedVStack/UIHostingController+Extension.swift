@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+// Inspired By
 // https://defagos.github.io/swiftui_collection_part3/
 // https://github.com/defagos/SwiftUICollection
 

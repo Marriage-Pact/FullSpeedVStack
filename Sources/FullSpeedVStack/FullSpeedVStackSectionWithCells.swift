@@ -1,6 +1,6 @@
 //
 //  FullSpeedVStackSectionWithCells.swift
-//  Checkmate
+//  
 //
 //  Created by Ian Thomas on 8/14/23.
 //
@@ -14,14 +14,14 @@ public protocol SectionItemProtocol: Hashable, Comparable, CaseIterable {
     var headerString: String { get }
 }
 
-/// When it's an enum with an associated value, make sure that value that is in `hash(into` is that associated value.
+/// When it's an enum with an associated value, make sure that value that is in `hash(into)` is that associated value.
 /*
  func hash(into hasher: inout Hasher) {
  switch self {
  case .topLineNumbers(let viewModel):
  hasher.combine(viewModel)
  */
-/// Also do a big switch statement for the `static func ==`
+/// Also completely fill-out the switch statement for the `static func ==`
 /*
  static func == (lhs: UserProfileCellViewModel, rhs: UserProfileCellViewModel) -> Bool {
  switch (lhs, rhs) {

@@ -1,14 +1,12 @@
 
 //
 //  FullSpeedVStackTableView.swift
-//  Checkmate
+//  
 //
 //  Created by Ian Thomas on 8/14/23.
 //
 
 import SwiftUI
-
-#warning("need to build in support for table view headers")
 
 public struct FullSpeedVStackTableView<Section: SectionItemProtocol, CellItem: CellItemProtocol, CellView: View, SupplementaryView: View>: UIViewRepresentable {
 
@@ -44,9 +42,7 @@ public struct FullSpeedVStackTableView<Section: SectionItemProtocol, CellItem: C
         fileprivate typealias DataSource = UITableViewDiffableDataSource<Section, CellItem>
         
         fileprivate var dataSource: DataSource? = nil
-//        fileprivate var sectionLayoutProvider: ((Int, NSCollectionLayoutEnvironment) -> NSCollectionLayoutSection)?
         fileprivate var rowsHash: Int? = nil
-        //        fileprivate var registeredSupplementaryViewKinds: [String] = []
         fileprivate let backgroundColor: UIColor
         
         public func scrollViewDidScroll(_ scrollView: UIScrollView) {
@@ -64,18 +60,11 @@ public struct FullSpeedVStackTableView<Section: SectionItemProtocol, CellItem: C
         public func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
             self.willDisplayCell(tableView, cell, indexPath)
         }
-        
-        /// Interestingly, before the view is awoken, this is called when cells are tapped on, but after the view scrolls for the first time, this is never called again.
-        //        func collectionView(_ collectionView: UITableView, didSelectItemAt indexPath: IndexPath) {
-        //            print("here")
-        //        }
     }
     
     let rows: [FullSpeedVStackSectionWithCells<Section, CellItem>]
-//    let sectionLayoutProvider: (Int, NSCollectionLayoutEnvironment) -> NSCollectionLayoutSection
     let cell: (IndexPath, CellItem) -> CellView
     let supplementaryView: (String, IndexPath) -> SupplementaryView
-    //    let supplementaryViewFull: SupplementaryViewProvider
     
     var onGestureShouldBegin: ((_ gestureRecognizer: UIPanGestureRecognizer, _ scrollView: UIScrollView) -> Bool)?
     var onScroll: ((UIScrollView) -> Void)
@@ -91,7 +80,6 @@ public struct FullSpeedVStackTableView<Section: SectionItemProtocol, CellItem: C
          backgroundColor: UIColor,
          invertView: Bool = false,
          needsToScrollToBottom: Binding<Bool>?,
-//         sectionLayoutProvider: @escaping (Int, NSCollectionLayoutEnvironment) -> NSCollectionLayoutSection,
          @ViewBuilder cell: @escaping (IndexPath, CellItem) -> CellView,
          @ViewBuilder supplementaryView: @escaping (String, IndexPath) -> SupplementaryView,
          onGestureShouldBegin: @escaping (_ gestureRecognizer: UIPanGestureRecognizer, _ scrollView: UIScrollView) -> Bool,
@@ -102,7 +90,6 @@ public struct FullSpeedVStackTableView<Section: SectionItemProtocol, CellItem: C
     ) {
         
         self.rows = rows
-//        self.sectionLayoutProvider = sectionLayoutProvider
         self.cell = cell
         self.supplementaryView = supplementaryView
         self.onGestureShouldBegin = onGestureShouldBegin
@@ -114,13 +101,7 @@ public struct FullSpeedVStackTableView<Section: SectionItemProtocol, CellItem: C
         self.invertView = invertView
         self.willDisplayCell = willDisplayCell
     }
-    
-//    private func layout(context: Context) -> UITableViewLayout {
-//        return UITableViewCompositionalLayout { sectionIndex, layoutEnvironment in
-//            return context.coordinator.sectionLayoutProvider!(sectionIndex, layoutEnvironment)
-//        }
-//    }
-    
+
     public func snapshot() -> NSDiffableDataSourceSnapshot<Section, CellItem> {
         var snapshot = NSDiffableDataSourceSnapshot<Section, CellItem>()
         
@@ -136,7 +117,6 @@ public struct FullSpeedVStackTableView<Section: SectionItemProtocol, CellItem: C
     
     private func reloadData(in tableView: UITableView, context: Context, animated: Bool = false) {
         let coordinator = context.coordinator
-//        coordinator.sectionLayoutProvider = self.sectionLayoutProvider
         
         guard let dataSource = coordinator.dataSource else { return }
         
@@ -147,27 +127,7 @@ public struct FullSpeedVStackTableView<Section: SectionItemProtocol, CellItem: C
             
             coordinator.rowsHash = rowsHash
         }
-        
-//        handleIfNeedToScrollToLatestMessage(collectionView: collectionView)
     }
-    
-//    private func handleIfNeedToScrollToLatestMessage(collectionView: UITableView) {
-//        
-//        guard let wrappedValue = needsToScrollToBottom?.wrappedValue,
-//              wrappedValue else { return }
-//        
-//        collectionViewScrollToLatestMessage(collectionView: collectionView)
-//        
-//        NotificationCenter.default.post(name: .scrollToBottomOfChatRoomSetFalse, object: nil)
-//    }
-//    
-//    private func collectionViewScrollToLatestMessage(collectionView: UITableView) {
-//        
-//        DispatchQueue.main.async {
-//            let rect = CGRect(x: 0, y: 0, width: 1, height: 1)
-//            collectionView.scrollRectToVisible(rect, animated: false)
-//        }
-//    }
     
     public func makeCoordinator() -> Coordinator {
         return Coordinator(backgroundColor: self.backgroundColor,
@@ -201,21 +161,14 @@ public struct FullSpeedVStackTableView<Section: SectionItemProtocol, CellItem: C
             
             hostCell?.selectionStyle = .none
                     
-            //            hostCell?.sizeToFit
-            /// if the cells are not sizing properly, try adding sizeToFit(), but will likely need more handholding to make production ready.
-            
             if invertView {
                 hostCell?.contentView.transform = CGAffineTransform(scaleX: 1, y: -1)
             }
             
-//            if Shared.isDeveloperDevice {
-//                hostCell?.backgroundColor = [UIColor.red, UIColor.blue, UIColor.yellow, UIColor.green].randomElement()!
-//            }
-            
             return hostCell
         }
         
-        /// Fixes bug where cells totally animated in and out when the delivery state was being updated.
+        /// This fixes a bug where cells totally animated in and out when the delivery state was being updated.
         dataSource.defaultRowAnimation = .fade
 
         context.coordinator.dataSource = dataSource
@@ -227,10 +180,9 @@ public struct FullSpeedVStackTableView<Section: SectionItemProtocol, CellItem: C
     public func updateUIView(_ uiView: UITableView, context: Context) {
         reloadData(in: uiView, context: context, animated: true)
     }
-    
 }
 
-/// This is so we can override `gestureRecognizerShouldBegin`
+/// We subclass `UITableView` so we can override `gestureRecognizerShouldBegin`
 final fileprivate class CustomUITableView: UITableView {
     
     init(frame: CGRect, invertView: Bool) {
@@ -238,7 +190,6 @@ final fileprivate class CustomUITableView: UITableView {
         super.init(frame: frame, style: UITableView.Style.plain)
         
         self.rowHeight = UITableView.automaticDimension
-//        self.estimatedRowHeight = 14.0
         self.separatorStyle = UITableViewCell.SeparatorStyle.none
 
         self.layoutMargins = UIEdgeInsets.zero

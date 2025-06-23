@@ -36,7 +36,6 @@ fileprivate class TestViewModel: ObservableObject {
             CellViewModel(),
             CellViewModel(),
         ]
-        //= Array.init(repeating: CellViewModel(), count: 20)
         sectionsDisplayed = [
             SectionWithCellsItem(section: SectionType.main, items: cells, displaySectionsWhenEmpty: true)
         ]
@@ -45,13 +44,7 @@ fileprivate class TestViewModel: ObservableObject {
     }
     
     @objc private func setScrollToItemFalse(_ notification: Notification) {
-        print("setScrollToItemFalse")
-//        guard let object = notification.object as? FullSpeedVStackSetScrollToIndexPathNilNotification, object.collectionViewId == self.collectionViewId else {
-//            print("wrong id")
-//            return
-//        }
         DispatchQueue.main.async { [weak self] in
-//            print("scrollToItem = nil")
             self?.scrollToItem = nil
         }
     }
