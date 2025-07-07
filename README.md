@@ -4,7 +4,7 @@ A high-performance SwiftUI package that provides native UICollectionView and UIT
 
 ## Why FullSpeedVStack?
 
-SwiftUI's native `List` and `LazyVStack` can struggle with performance when displaying thousands of items or complex layouts. FullSpeedVStack leverages the battle-tested performance of UIKit's collection and table views while maintaining a SwiftUI-first API.
+SwiftUI's native `List` and `LazyVStack` can struggle with performance when displaying thousands of items or complex layouts. FullSpeedVStack leverages the battle-tested performance of UIKit's collection and table views while maintaining a SwiftUI-first API. 
 
 **Key Benefits:**
 - 🚀 **High Performance**: Handles thousands of items smoothly
@@ -14,6 +14,9 @@ SwiftUI's native `List` and `LazyVStack` can struggle with performance when disp
 - 🔍 **Built-in Search**: Integrated search functionality
 - 📍 **Scroll Control**: Programmatic scrolling with animation support
 - 🔀 **Flexible**: Both collection view and table view implementations
+
+## Real World Usage
+This package is used in Checkmate, an app that peaked with 250,000+ unique users and a rank of #12 in Social Networking.
 
 ## Installation
 
@@ -235,7 +238,8 @@ FullSpeedVStack exposes several delegate methods that allow you to respond to sc
 
 #### onGestureShouldBegin
 
-Control whether pan gestures should begin. Useful for implementing custom gesture handling or preventing scrolling in certain conditions:
+Control whether pan gestures should begin. Useful for implementing custom gesture handling or preventing scrolling in certain conditions.
+For example, when displaying a FullSpeedVStack in a drawer, this func can be used to only scroll the content when the drawer is in the fully-presented position.
 
 ```swift
 onGestureShouldBegin: { gestureRecognizer, scrollView in }
